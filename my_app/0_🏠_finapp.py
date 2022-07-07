@@ -17,6 +17,4 @@ with st.expander("Tell me more about it!"):
         will be able to input the ticker of your choice and choose a period, we will run for you a simulation 
         of the value of portfolio when following the different prediction models. 
     """)
-st.markdown('* Get general performance of our predictions over 1️⃣0️⃣0️⃣ stocks for which we tested the strategies')
-st.markdown('* Get to know a bit more about us 😊')
 
