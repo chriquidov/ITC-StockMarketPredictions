@@ -82,6 +82,7 @@ with st.expander('More on the graph'):
 pd.set_option('max_colwidth', 60)
 summary = summary.format({"System_return": "{:20,.2%}",
                           "Recommandation_accuracy": "{:20,.2%}",
+                          "Stock_return":"{:20,.2%}",
                           "RMSE": "{:20,.2f}",
                           "std_stock": "{:20,.2f}", "Stock_return": "{:20,.2f}",
                           "std_system": "{:20,.2f}"})
