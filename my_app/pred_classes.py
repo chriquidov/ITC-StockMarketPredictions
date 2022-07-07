@@ -85,7 +85,7 @@ class StockPrediction():
             bsl_fit = bsl_model.fit()
             self.baseline_pred.append(bsl_fit.forecast()[0])
             self.baseline_history.append(self.test[t])
-            arima_bar.progress(t+1)
+            arima_bar.progress((100//self.test.size)*t)
         arima_bar.empty()
         self.baseline_RMSE = np.sqrt(
             ((self.test.to_numpy() - np.array(self.baseline_pred)) ** 2).sum() / len(self.test.index))
@@ -114,7 +114,7 @@ class StockPrediction():
             exp_fit = exp_model.fit()
             exp_pred[self.test.index[t]] = exp_fit.forecast()[0]
             exp_history.append(self.test[t])
-            exp_bar.progress(t + 1)
+            exp_bar.progress((100//self.test.size)*t)
         exp_bar.empty()
         self.exp_preds = exp_pred
         self.exp_RMSE = mean_squared_error(self.test, self.exp_preds, squared=False)

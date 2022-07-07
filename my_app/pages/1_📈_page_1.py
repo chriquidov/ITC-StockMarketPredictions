@@ -46,15 +46,15 @@ preds_dict = {'Exponantial Smoothing': spy.exp_preds, 'Moving average': spy.ravg
 
 if options != 'All of them':
     preds = preds_dict[options]
+    money = Invest_shorten(options, spy.test, preds)
+    summary=money.make_summary_table().style
 
-    money_ravg = Invest_shorten(options, spy.test, preds)
-    summary=money_ravg.make_summary_table()
-
-    pred_count=money_ravg.daily_table.pred_rec.loc[money_ravg.daily_table.pred_rec==1].size /money_ravg.daily_table.size
-    fig=money_ravg.plot_money_end_day_evolution()
+    pred_count= money.daily_table.pred_rec.loc[money.daily_table.pred_rec == 1].size / money.daily_table.size
+    fig=money.plot_money_end_day_evolution()
     st.pyplot(fig=fig)
 
     st.write(f'The model predicts than the stock will go up {pred_count:.0%} of the time')
+    spy.baseline_predict()
 
 
 else:
@@ -69,18 +69,23 @@ else:
         money.daily_table['Adj_close'].plot(label='True prices')
 
         money.plot_money_end_day_evolution(True)
+    summary = summary.style.highlight_max(axis=0, subset=['System_return', 'Recommandation_accuracy'],
+                                          color='lightgreen').highlight_min(color='lightgreen', axis=0
+                                                                            , subset=['RMSE', 'std_system'])
+
 
     plt.legend()
     st.pyplot(f)
+with st.expander('More on the graph'):
+    st.write("The graph is a simulation of the value of your portfolio in a case where you invest the value of"
+             "the stock following the models predictions, meaning the investing only when the models predict a "
+             "positive return on the next period. ")
 
 pd.set_option('max_colwidth', 60)
-summary=summary.style.highlight_max(axis=0,subset=['System_return','Recommandation_accuracy'],
-                            color='lightgreen').highlight_min(color='lightgreen',axis=0
-                                                              ,subset=['RMSE','std_system'])
-summary=summary.format({"System_return": "{:20,.2f}%",
+summary = summary.format({"System_return": "{:20,.2f}%",
                           "Recommandation_accuracy": "{:20,.2f}%",
                           "RMSE": "{:20,.2f}",
-                        "std_stock": "{:20,.2f}","Stock_return": "{:20,.2f}%",
-                          "std_system":"{:20,.2f}"})
+                          "std_stock": "{:20,.2f}", "Stock_return": "{:20,.2f}%",
+                          "std_system": "{:20,.2f}"})
 st.dataframe(summary)
 
