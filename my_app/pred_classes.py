@@ -245,16 +245,16 @@ class Invest_shorten():
             0]  # Initialises the initial money as initial stock price
         self.daily_table['money_end_day'] = np.cumprod(self.daily_table.profit_pred)
 
-    def plot_money_end_day_evolution(self,all_strat=False):
+    def plot_money_end_day_evolution(self,all_strat=0):
         """Plots the total amount of money of stock vs prediction based"""
-        if not all_strat:
+        if all_strat==0:
             f=plt.figure(figsize=(13, 10))
             self.daily_table['Adj_close'].plot( label='True prices')
-            self.daily_table.money_end_day.plot( label='Preds')
+            self.daily_table.money_end_day.plot( label=self.model_name)
             plt.title('Investing in this strategy this is the evolution of your Portfolio', fontsize=15)
             plt.legend()
             return f
-        else:
+        elif all_strat==1:
             self.daily_table.money_end_day.plot(label=self.model_name)
 
     def plot_daily_pct_change(self):

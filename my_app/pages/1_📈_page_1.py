@@ -55,6 +55,7 @@ if options != 'All of them':
 
     st.write(f'The model predicts than the stock will go up {pred_count:.0%} of the time')
 
+
 else:
 
     summary = pd.DataFrame()
@@ -64,9 +65,10 @@ else:
 
         money = Invest_shorten(k,spy.test,v)
         summary=pd.concat([summary,money.make_summary_table()])
-        money.daily_table['Adj_close'].plot(label='True prices')
+
 
         money.plot_money_end_day_evolution(True)
+    money.daily_table['Adj_close'].plot(label='True prices')
     summary = summary.style.highlight_max(axis=0, subset=['System_return', 'Recommandation_accuracy'],
                                           color='lightgreen').highlight_min(color='lightgreen', axis=0
                                                                             , subset=['RMSE', 'std_system'])
