@@ -67,7 +67,8 @@ else:
         money = Invest_shorten(k,spy.test,v)
         summary=pd.concat([summary,money.make_summary_table()])
         money.daily_table['Adj_close'].plot(label='True prices')
-        money.plot_money_end_day_evolution(all_strat=True)
+
+        money.plot_money_end_day_evolution(True)
 
     plt.legend()
     st.pyplot(f)
