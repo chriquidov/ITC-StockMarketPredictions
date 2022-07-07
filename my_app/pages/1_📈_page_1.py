@@ -54,8 +54,6 @@ if options != 'All of them':
     st.pyplot(fig=fig)
 
     st.write(f'The model predicts than the stock will go up {pred_count:.0%} of the time')
-    spy.baseline_predict()
-
 
 else:
 
@@ -72,8 +70,6 @@ else:
     summary = summary.style.highlight_max(axis=0, subset=['System_return', 'Recommandation_accuracy'],
                                           color='lightgreen').highlight_min(color='lightgreen', axis=0
                                                                             , subset=['RMSE', 'std_system'])
-
-
     plt.legend()
     st.pyplot(f)
 with st.expander('More on the graph'):
