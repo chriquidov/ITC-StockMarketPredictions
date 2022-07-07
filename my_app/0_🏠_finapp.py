@@ -14,7 +14,7 @@ st.markdown('* Test the different strategies we used for predictions on a stock 
 with st.expander("Tell me more about it!"):
     st.write("""
         We trained different models to predict stock prices for the next period, Visiting the demo page you 
-        will be able to input the ticker of your choice and choose a period , ew will run for you a simulation 
+        will be able to input the ticker of your choice and choose a period, we will run for you a simulation 
         of the value of portfolio when following the different prediction models. 
     """)
 st.markdown('* Get general performance of our predictions over 1️⃣0️⃣0️⃣ stocks for which we tested the strategies')
