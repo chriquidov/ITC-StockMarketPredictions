@@ -80,10 +80,10 @@ with st.expander('More on the graph'):
              "positive return on the next period. ")
 
 pd.set_option('max_colwidth', 60)
-summary = summary.format({"System_return": "{:20,.2f}%",
-                          "Recommandation_accuracy": "{:20,.2f}%",
+summary = summary.format({"System_return": "{:20,.2%}",
+                          "Recommandation_accuracy": "{:20,.2%}",
                           "RMSE": "{:20,.2f}",
-                          "std_stock": "{:20,.2f}", "Stock_return": "{:20,.2f}%",
+                          "std_stock": "{:20,.2f}", "Stock_return": "{:20,.2f}",
                           "std_system": "{:20,.2f}"})
 st.dataframe(summary)
 
