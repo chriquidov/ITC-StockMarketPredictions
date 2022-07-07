@@ -47,7 +47,7 @@ class StockPrediction():
         self.ravg_preds=None
         self.drift_preds=None
         self.naive_preds=None
-
+    @st.cache(suppress_st_warning=True,allow_output_mutation=True)
     def download_ticker(self, ticker, interval):
         """params:
             ticker: default is SPY
@@ -79,11 +79,14 @@ class StockPrediction():
         self.baseline_pred = []
         self.baseline_history = self.train.to_list()
 
-        for t in tqdm(range(len(self.test)), total=len(self.test)):
+        arima_bar=st.progress(0)
+        for t in range(len(self.test)):
             bsl_model = ARIMA(self.baseline_history, order=(p, q if not diff else 0, q))
             bsl_fit = bsl_model.fit()
             self.baseline_pred.append(bsl_fit.forecast()[0])
             self.baseline_history.append(self.test[t])
+            arima_bar.progress(t+1)
+        arima_bar.empty()
         self.baseline_RMSE = np.sqrt(
             ((self.test.to_numpy() - np.array(self.baseline_pred)) ** 2).sum() / len(self.test.index))
 
@@ -105,12 +108,14 @@ class StockPrediction():
         """Makes exponantial smoothing predictions for all test set, adds it as a new attribute: self.exp_preds"""
         exp_pred = pd.Series()
         exp_history = self.train.to_list()
-
+        exp_bar = st.progress(0)
         for t in range(len(self.test)):
             exp_model = SimpleExpSmoothing(exp_history, initialization_method='estimated')
             exp_fit = exp_model.fit()
             exp_pred[self.test.index[t]] = exp_fit.forecast()[0]
             exp_history.append(self.test[t])
+            exp_bar.progress(t + 1)
+        exp_bar.empty()
         self.exp_preds = exp_pred
         self.exp_RMSE = mean_squared_error(self.test, self.exp_preds, squared=False)
 
@@ -240,14 +245,17 @@ class Invest_shorten():
             0]  # Initialises the initial money as initial stock price
         self.daily_table['money_end_day'] = np.cumprod(self.daily_table.profit_pred)
 
-    def plot_money_end_day_evolution(self):
+    def plot_money_end_day_evolution(self,all_strat=False):
         """Plots the total amount of money of stock vs prediction based"""
-        f=plt.figure(figsize=(13, 10))
-        self.daily_table['Adj_close'].plot( label='True prices')
-        self.daily_table.money_end_day.plot( label='Preds')
-        plt.title('Investing in this strategy this is the evolution of your Portfolio', fontsize=15)
-        plt.legend()
-        return f
+        if not all_strat:
+            f=plt.figure(figsize=(13, 10))
+            self.daily_table['Adj_close'].plot( label='True prices')
+            self.daily_table.money_end_day.plot( label='Preds')
+            plt.title('Investing in this strategy this is the evolution of your Portfolio', fontsize=15)
+            plt.legend()
+            return f
+        else:
+            self.daily_table.money_end_day.plot(label=self.model_name)
 
     def plot_daily_pct_change(self):
         plt.figure(figsize=(13, 10))
